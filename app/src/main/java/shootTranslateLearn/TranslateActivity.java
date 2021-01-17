@@ -50,6 +50,7 @@ public class TranslateActivity extends AppCompatActivity
     private FirebaseFirestore firebaseFirestore;
     private ProgressBar progressBar;
     private Spinner spinner;
+    private String targetLangCode;
     private String targetLang;
     private Locale localeLang;
     private String detectedObject;
@@ -93,24 +94,25 @@ public class TranslateActivity extends AppCompatActivity
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
             {
-                String language = adapter.getItem(position);
-                if (language.equals("French"))
+                targetLang = adapter.getItem(position);
+
+                if (targetLang.equals("French"))
                 {
-                    targetLang = TranslateLanguage.FRENCH;
+                    targetLangCode = TranslateLanguage.FRENCH;
                     localeLang = Locale.FRENCH;
                 }
-                else if (language.equals("German"))
+                else if (targetLang.equals("German"))
                 {
-                    targetLang = TranslateLanguage.GERMAN;
+                    targetLangCode = TranslateLanguage.GERMAN;
                     localeLang = Locale.GERMAN;
                 }
                 else
                 {
-                    targetLang = TranslateLanguage.JAPANESE;
+                    targetLangCode = TranslateLanguage.JAPANESE;
                     localeLang = Locale.JAPANESE;
                 }
 
-                if (!language.equals("Choose language"))
+                if (!targetLang.equals("Choose language"))
                 {
                     translate_bttn.setEnabled(true);
                     translator = null;
@@ -134,7 +136,7 @@ public class TranslateActivity extends AppCompatActivity
                 TranslatorOptions options =
                         new TranslatorOptions.Builder()
                                 .setSourceLanguage(TranslateLanguage.ENGLISH)
-                                .setTargetLanguage(targetLang)
+                                .setTargetLanguage(targetLangCode)
                                 .build();
 
                 translator = Translation.getClient(options);
