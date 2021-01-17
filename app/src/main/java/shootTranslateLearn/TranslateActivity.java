@@ -21,6 +21,7 @@ import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -29,11 +30,14 @@ import com.google.mlkit.nl.translate.TranslateLanguage;
 import com.google.mlkit.nl.translate.Translation;
 import com.google.mlkit.nl.translate.Translator;
 import com.google.mlkit.nl.translate.TranslatorOptions;
+
 import org.tensorflow.lite.examples.detection.R;
+
 import java.util.HashMap;
 import java.util.Locale;
 
-public class TranslateActivity extends AppCompatActivity {
+public class TranslateActivity extends AppCompatActivity
+{
     public static final String TAG = "TranslateActivity";
     private TextView selected;
     private ImageView image;
@@ -53,7 +57,8 @@ public class TranslateActivity extends AppCompatActivity {
     private Translator translator;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.translate_activity_view);
 
@@ -73,8 +78,7 @@ public class TranslateActivity extends AppCompatActivity {
 
         selected.setText(detectedObject);
         translate_bttn.setEnabled(false);
-      
-        Intent intent = getIntent();
+
         String originalWord = intent.getStringExtra("image");
         selected.setText(originalWord);
         byte[] byteArray = intent.getByteArrayExtra("BITMAP");
@@ -84,32 +88,43 @@ public class TranslateActivity extends AppCompatActivity {
         String[] languages = {"Choose language", "French", "German", "Japanese"};
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, languages);
         spinner.setAdapter(adapter);
-        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
+        {
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
+            {
                 String language = adapter.getItem(position);
-                if (language.equals("French")) {
+                if (language.equals("French"))
+                {
                     targetLang = TranslateLanguage.FRENCH;
                     localeLang = Locale.FRENCH;
-                } else if (language.equals("German")) {
+                }
+                else if (language.equals("German"))
+                {
                     targetLang = TranslateLanguage.GERMAN;
                     localeLang = Locale.GERMAN;
-                } else {
+                }
+                else
+                {
                     targetLang = TranslateLanguage.JAPANESE;
                     localeLang = Locale.JAPANESE;
                 }
 
-                if (!language.equals("Choose language")) {
+                if (!language.equals("Choose language"))
+                {
                     translate_bttn.setEnabled(true);
                     translator = null;
                 }
 
                 // Set textToSpeech language option for locale
                 textToSpeech = new TextToSpeech(getApplicationContext(),
-                        new TextToSpeech.OnInitListener() {
+                        new TextToSpeech.OnInitListener()
+                        {
                             @Override
-                            public void onInit(int status) {
-                                if (status == TextToSpeech.SUCCESS) {
+                            public void onInit(int status)
+                            {
+                                if (status == TextToSpeech.SUCCESS)
+                                {
                                     int lang = textToSpeech.setLanguage(localeLang);
                                     textToSpeech.setSpeechRate((float) 0.8);
                                 }
@@ -126,51 +141,63 @@ public class TranslateActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onNothingSelected(AdapterView<?> parent) {
+            public void onNothingSelected(AdapterView<?> parent)
+            {
 
             }
         });
 
-        speakButton.setOnClickListener(new View.OnClickListener() {
+        speakButton.setOnClickListener(new View.OnClickListener()
+        {
             @Override
-            public void onClick(View v) {
+            public void onClick(View v)
+            {
                 int speak = textToSpeech.speak(translation, TextToSpeech.QUEUE_FLUSH, null);
 
             }
         });
 
         // save word button
-        saveButton.setOnClickListener(new View.OnClickListener(){
+        saveButton.setOnClickListener(new View.OnClickListener()
+        {
             @Override
-            public void onClick(View v) {
+            public void onClick(View v)
+            {
                 HashMap<String, String> word_info = new HashMap<>();
                 word_info.put("original_word", originalWord);
-                word_info.put("target_language", "FrenchTest");
-                word_info.put("translated_word", "TranslatedWordTest");
+                word_info.put("target_language", targetLang);
+                word_info.put("translated_word", translation);
                 firebaseFirestore.collection("words")
-                    .document()
-                    .set(word_info)
-                    .addOnSuccessListener(new OnSuccessListener<Void>() {
-                        @Override
-                        public void onSuccess(Void aVoid) {
-                            Log.d("Michelle", "word_info has been added successfully");
-                            Toast.makeText(TranslateActivity.this, "Word saved!",
-                                    Toast.LENGTH_SHORT).show();
-                        }
-                    })
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Log.d("Michelle", "word_info not added");
-                        }
-                    });
+                        .document()
+                        .set(word_info)
+                        .addOnSuccessListener(new OnSuccessListener<Void>()
+                        {
+                            @Override
+                            public void onSuccess(Void aVoid)
+                            {
+                                Log.d("Michelle", "word_info has been added successfully");
+                                Toast.makeText(TranslateActivity.this, "Word saved!",
+                                        Toast.LENGTH_SHORT).show();
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener()
+                        {
+                            @Override
+                            public void onFailure(@NonNull Exception e)
+                            {
+                                Log.d("Michelle", "word_info not added");
+                            }
+                        });
             }
         });
 
-        translate_bttn.setOnClickListener(new View.OnClickListener() {
+        translate_bttn.setOnClickListener(new View.OnClickListener()
+        {
             @Override
-            public void onClick(View v) {
-                if (translator != null) {
+            public void onClick(View v)
+            {
+                if (translator != null)
+                {
                     progressBar.setVisibility(View.VISIBLE);
                     translateText(translator);
                 }
@@ -179,14 +206,16 @@ public class TranslateActivity extends AppCompatActivity {
 
     }
 
-    private void translateText(Translator translator) {
+    private void translateText(Translator translator)
+    {
         DownloadConditions conditions = new DownloadConditions.Builder()
                 .requireWifi()
                 .build();
 
         translator.downloadModelIfNeeded(conditions)
                 .addOnSuccessListener(
-                        new OnSuccessListener<Void>() {
+                        new OnSuccessListener<Void>()
+                        {
                             @Override
                             public void onSuccess(Void v)
                             {
@@ -196,7 +225,8 @@ public class TranslateActivity extends AppCompatActivity {
 
                                 translator.translate(detectedObject)
                                         .addOnSuccessListener(
-                                                new OnSuccessListener<String>() {
+                                                new OnSuccessListener<String>()
+                                                {
 
                                                     @Override
                                                     public void onSuccess(String translatedText)
@@ -209,9 +239,11 @@ public class TranslateActivity extends AppCompatActivity {
 
                                                 })
                                         .addOnFailureListener(
-                                                new OnFailureListener() {
+                                                new OnFailureListener()
+                                                {
                                                     @Override
-                                                    public void onFailure(@NonNull Exception e) {
+                                                    public void onFailure(@NonNull Exception e)
+                                                    {
                                                         translated.setError("Something went wrong :(");
                                                         progressBar.setVisibility(View.GONE);
                                                         Log.d("Jawad", "failed translating");
@@ -222,9 +254,11 @@ public class TranslateActivity extends AppCompatActivity {
                             }
                         })
                 .addOnFailureListener(
-                        new OnFailureListener() {
+                        new OnFailureListener()
+                        {
                             @Override
-                            public void onFailure(@NonNull Exception e) {
+                            public void onFailure(@NonNull Exception e)
+                            {
                                 progressBar.setVisibility(View.GONE);
                                 Log.d(TAG, "Model couldn’t be downloaded or other internal error.");
                             }
