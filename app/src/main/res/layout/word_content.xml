@@ -45,6 +45,7 @@
             android:id="@+id/target_language"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:padding="5dp"
             android:fontFamily="@font/happy_monkey"
             android:text="Target Language:"
@@ -54,13 +55,23 @@
             android:id="@+id/target_language_textview"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:padding="5dp"
             android:fontFamily="@font/happy_monkey"
             android:text="French"
-            android:textSize="20sp">
+            android:textSize="20sp"/>
 
-        </TextView>
+        <ImageButton
+            android:id="@+id/wordSpeakButton"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:backgroundTint="@android:color/transparent"
+            android:src="@drawable/ic_baseline_volume_up_24" />
+
     </LinearLayout>
+
 
     <LinearLayout
         android:layout_width="fill_parent"
