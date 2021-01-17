@@ -29,6 +29,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.mlkit.common.model.DownloadConditions;
 import com.google.mlkit.nl.translate.TranslateLanguage;
@@ -194,7 +195,7 @@ public class TranslateActivity extends AppCompatActivity
                     word_info.put("target_language", targetLang);
                     word_info.put("translated_word", translation);
                     firebaseFirestore.collection("words")
-                            .document()
+                            .document(originalWord+targetLang)
                             .set(word_info)
                             .addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
