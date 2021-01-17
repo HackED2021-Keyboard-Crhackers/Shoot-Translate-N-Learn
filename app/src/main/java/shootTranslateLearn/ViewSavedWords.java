@@ -2,6 +2,7 @@ package shootTranslateLearn;
 
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
@@ -23,6 +24,7 @@ public class ViewSavedWords extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.view_saved_words);
 
+        Log.d("Michelle","ViewSavedWords launched");
         wordList = findViewById(R.id.word_list);
         wordDataList = new ArrayList<>();
 
@@ -35,5 +37,7 @@ public class ViewSavedWords extends AppCompatActivity {
 
         wordAdapter = new CustomList(this, wordDataList);
         wordList.setAdapter(wordAdapter);
+        System.out.println(wordList);
+        Log.d("Michelle","ViewSavedWords finished");
     }
 }

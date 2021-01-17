@@ -1,6 +1,7 @@
 package shootTranslateLearn;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,6 +31,7 @@ public class CustomList extends ArrayAdapter<Word> {
         if (view == null) {
             view = LayoutInflater.from(context).inflate(R.layout.word_content, parent, false);
         }
+        Log.d("Michelle","CustomList launched");
 
         Word word = words.get(position);
 
@@ -41,6 +43,6 @@ public class CustomList extends ArrayAdapter<Word> {
         target_language_textview.setText(word.getTargetLanguage());
         translated_word_textview.setText(word.getTranslatedWord());
 
-        return convertView;
+        return view;
     }
 }
